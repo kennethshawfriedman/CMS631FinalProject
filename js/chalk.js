@@ -28,6 +28,51 @@ function chalkboard(){
 	var eraserWidth = 50;
 	var eraserHeight = 100;
 	
+		var c=document.getElementById("chalkboard");
+	var ctx=c.getContext("2d");
+	ctx.beginPath();
+	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
+	ctx.lineWidth = 10;
+	ctx.moveTo(100,200);
+	ctx.lineTo(100,600);
+	ctx.stroke();
+
+	var c=document.getElementById("chalkboard");
+	var ctx=c.getContext("2d");
+	ctx.beginPath();
+	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
+	ctx.lineWidth = 10;
+	ctx.moveTo(100,400);
+	ctx.lineTo(1000,400);
+	ctx.stroke();
+
+	var c=document.getElementById("chalkboard");
+	var ctx=c.getContext("2d");
+	ctx.beginPath();
+	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
+	ctx.lineWidth = 10;
+	ctx.moveTo(1000,200);
+	ctx.lineTo(1000,600);
+	ctx.stroke();
+
+	var canvas = document.getElementById("chalkboard");
+	var ctx = canvas.getContext("2d");
+	ctx.font = "20px Arial";
+	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+	ctx.fillText("0% Women",80,190);
+
+	var canvas = document.getElementById("chalkboard");
+	var ctx = canvas.getContext("2d");
+	ctx.font = "20px Arial";
+	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+	ctx.fillText("100% Women",900,190);
+
+	var canvas = document.getElementById("chalkboard");
+	var ctx = canvas.getContext("2d");
+	ctx.font = "30px Arial";
+	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+	ctx.fillText("What Percent of Faculty are women?",300,50);
+	
 	$('#chalkboard').css('cursor','none');
 	document.onselectstart = function(){ return false; };
 	ctx.fillStyle = 'rgba(255,255,255,0.5)';	
