@@ -71,7 +71,7 @@ function chalkboard(){
 	var ctx = canvas.getContext("2d");
 	ctx.font = "30px Arial";
 	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.fillText("What Percent of Faculty are women?",300,50);
+	ctx.fillText("What Percent of Faculty are Women?",300,50);
 	
 	$('#chalkboard').css('cursor','none');
 	document.onselectstart = function(){ return false; };
@@ -117,18 +117,7 @@ function chalkboard(){
     	console.log('touchend');
         mouseD = false;
         
-        var average = sum/count;
-		var guesspercent = (average-100)/900
-		
-		var c=document.getElementById("chalkboard");
-		var ctx=c.getContext("2d");
-		ctx.beginPath();
-		ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-		ctx.lineWidth = 10;
-		ctx.moveTo(100,200);
-		ctx.lineTo(100,600);
-		ctx.stroke();
-	
+        showResult();
    
     }, false);
     $('#chalkboard').css('cursor','none');
@@ -180,10 +169,35 @@ function chalkboard(){
 			eraser = false;
 			$('.chalk').removeClass('eraser');
 		}
-		
-		
-		
+		showResult();
 	});
+	
+	var showResult = function() {
+		var average = sum/count;
+		var guesspercent = (average-100)/900
+
+		var c=document.getElementById("chalkboard");
+		var ctx=c.getContext("2d");
+		ctx.strokeStyle = 'rgba(2, 136, 77, 1.0)';
+		ctx.fillStyle = 'rgba(2, 136, 77, 1.0)';
+		ctx.fillRect(100,300,189,200);
+		ctx.stroke();
+		
+		var canvas = document.getElementById("chalkboard");
+		var ctx = canvas.getContext("2d");
+		ctx.font = "15px Arial";
+		ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+		
+		ctx.fillText("You guessed "+parseInt(guesspercent*100).toString()+"%", average, 150);
+		
+		var canvas = document.getElementById("chalkboard");
+		var ctx = canvas.getContext("2d");
+		ctx.font = "15px Arial";
+		ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+		ctx.fillText("Only 21% of MIT faculty are women", 160, 550);
+		
+		
+	}
 
 	$(document).keyup(function(evt){
 		if(evt.keyCode == 32){
