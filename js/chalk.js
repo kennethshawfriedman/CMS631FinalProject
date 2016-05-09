@@ -82,12 +82,15 @@ function chalkboard(){
 
 	var patImg = document.getElementById('pattern');
 
+	var sum = 0;
 	var count = 0;
 	document.addEventListener('touchmove', function(evt) {
+		console.log("touchmove");
         var touch = evt.touches[0];
-        // console.log(count++);
         mouseX = touch.pageX;
         mouseY = touch.pageY;
+        count++;
+        sum+=mouseX;
         if (mouseY < height && mouseX < width) {
             evt.preventDefault();
             $('.chalk').css('left', mouseX + 'px');
@@ -135,6 +138,7 @@ function chalkboard(){
 	ctx.lineCap = 'round';
 	
 	$(document).mousemove(function(evt){
+		console.log("mousemove");
 		mouseX = evt.pageX;
 		mouseY = evt.pageY;
 		if(mouseY<height && mouseX<width){
@@ -144,6 +148,8 @@ function chalkboard(){
 				if(eraser){
 					erase(mouseX,mouseY);
 				}else{
+					count++;
+    				sum+=mouseX;				
 					draw(mouseX,mouseY);
 					}
 				}
@@ -151,7 +157,8 @@ function chalkboard(){
 			$('.chalk').css('top',height-10);
 			}
 		});
-	$(document).mousedown(function(evt){ 
+	$(document).mousedown(function(evt){
+		console.log("mousedown");
 		mouseD = true;
 		xLast = mouseX;
 		yLast = mouseY;
@@ -167,6 +174,7 @@ function chalkboard(){
 	});
 
 	$(document).mouseup(function(evt){ 
+		console.log("mouseup");
 		mouseD = false;
 		if(evt.button == 2){
 			eraser = false;
