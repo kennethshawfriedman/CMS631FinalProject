@@ -105,7 +105,7 @@ function chalkboard(){
         //evt.preventDefault();
         console.log("touchstart");
         var touch = evt.touches[0];
-        console.log(touch.pageX);
+        reset();	
         mouseD = true;
         mouseX = touch.pageX;
         mouseY = touch.pageY;
@@ -117,7 +117,8 @@ function chalkboard(){
     	console.log('touchend');
         mouseD = false;
         
-        showResult();
+        showResult();	
+
    
     }, false);
     $('#chalkboard').css('cursor','none');
@@ -158,7 +159,8 @@ function chalkboard(){
 		}else{
 			if(!$('.panel').is(':hover')){
 				draw(mouseX+1,mouseY+1);
-			}		
+			}	
+			reset();	
 		}
 	});
 
@@ -197,6 +199,12 @@ function chalkboard(){
 		ctx.fillText("Only 21% of MIT faculty are women", 160, 550);
 		
 		
+	}
+
+	var reset = function(){
+		sum = 0;
+		count = 0;
+		average = 0;
 	}
 
 	$(document).keyup(function(evt){
