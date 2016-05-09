@@ -72,6 +72,7 @@ function chalkboard(){
 	ctx.font = "30px Arial";
 	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
 	ctx.fillText("What Percent of Faculty are Women?",300,50);
+	ctx.fillText("Draw a line to show your belief.",350,100);
 	
 	$('#chalkboard').css('cursor','none');
 	document.onselectstart = function(){ return false; };
