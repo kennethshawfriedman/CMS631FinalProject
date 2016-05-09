@@ -1,13 +1,19 @@
 $(document).ready(chalkboard);
 
 function chalkboard(){
+	// Remove the placeholder and create the chalkboard
 	$('#chalkboard').remove();
 	$('.chalk').remove();
-	$('body').prepend('<div class="panel"><a class="link" target="_blank">Save</a></div>');
+	// $('body').prepend('<div class="panel"><a class="link" target="_blank">Save</a></div>');
 	$('body').prepend('<img src="img/bg.png" id="pattern" width=50 height=50>');
+	$('body').prepend('<canvas id="background"></canvas>');
 	$('body').prepend('<canvas id="chalkboard"></canvas>');
+
 	$('body').prepend('<div class="chalk"></div>');
+	$('body').prepend($("<p>", {id:"title"}));
+	$("#title").text("CHAKL");
 	
+	// The chalkboard view
 	var canvas = document.getElementById("chalkboard");
 	$('#chalkboard').css('width',$(window).width());
 	$('#chalkboard').css('height',$(window).height());
@@ -21,59 +27,59 @@ function chalkboard(){
 	var mouseX = 0;
 	var mouseY = 0;
 	var mouseD = false;
-	var eraser = false;
 	var xLast = 0;
 	var yLast = 0;
 	var brushDiameter = 7;
-	var eraserWidth = 50;
-	var eraserHeight = 100;
+	ctx.lineWidth = brushDiameter;
+	ctx.lineCap = 'round';
 	
-	var c=document.getElementById("chalkboard");
-	var ctx=c.getContext("2d");
-	ctx.beginPath();
-	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.lineWidth = 10;
-	ctx.moveTo(100,200);
-	ctx.lineTo(100,600);
-	ctx.stroke();
+	var drawLinearScale = function(){
+		ctx.lineWidth = 10;
+		var left = 100;
+		var top = 200;
+		var scaleWidth = 900;
+		var scaleHeight = 200;
+		var right = left+scaleWidth;
+		var bottom = top+scaleHeight;
+		var mid = top+scaleHeight/2;
 
-	var c=document.getElementById("chalkboard");
-	var ctx=c.getContext("2d");
-	ctx.beginPath();
-	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.lineWidth = 10;
-	ctx.moveTo(100,400);
-	ctx.lineTo(1000,400);
-	ctx.stroke();
+		drawChalkLine(left,top,left,bottom);
+		drawChalkLine(right,top,right,bottom);
+		drawChalkLine(left,mid,right,mid);
 
-	var c=document.getElementById("chalkboard");
-	var ctx=c.getContext("2d");
-	ctx.beginPath();
-	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.lineWidth = 10;
-	ctx.moveTo(1000,200);
-	ctx.lineTo(1000,600);
-	ctx.stroke();
-
-	var canvas = document.getElementById("chalkboard");
-	var ctx = canvas.getContext("2d");
-	ctx.font = "20px Arial";
-	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.fillText("0% Women",80,190);
-
-	var canvas = document.getElementById("chalkboard");
-	var ctx = canvas.getContext("2d");
-	ctx.font = "20px Arial";
-	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.fillText("100% Women",900,190);
-
-	var canvas = document.getElementById("chalkboard");
-	var ctx = canvas.getContext("2d");
-	ctx.font = "30px Arial";
-	ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
-	ctx.fillText("What Percent of Faculty are Women?",300,50);
-	ctx.fillText("Draw a line to show your belief.",350,100);
+		// The old way of doing things for property reference
+		// ctx.beginPath();
+		// ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
+		// ctx.lineWidth = 10;
+		// ctx.moveTo(100,400);
+		// ctx.lineTo(1000,400);
+		// ctx.stroke();
+	};
 	
+	drawLinearScale();
+
+	var drawQuestion = function (){
+		ctx.font = "20px Arial";
+		ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+		ctx.fillText("0% Women",80,190);
+		// var leftNotation = $("<p>", {id:"description-left",class: "notation"})
+		// $('body').append(leftNotation);
+		// leftNotation.text("0% Women");
+		// leftNotation.css({"left":"80px", "top": "190px"});
+
+		ctx.font = "20px Arial";
+		ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+		ctx.fillText("100% Women",900,190);
+
+		ctx.font = "30px Arial";
+		ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
+		ctx.fillText("What Percent of Faculty are Women?",300,50);
+		ctx.fillText("Draw a line to show your belief.",350,100);
+		
+	}
+
+	drawQuestion();
+		
 	$('#chalkboard').css('cursor','none');
 	document.onselectstart = function(){ return false; };
 	ctx.fillStyle = 'rgba(255,255,255,0.5)';	
@@ -136,14 +142,11 @@ function chalkboard(){
 			$('.chalk').css('left',(mouseX-0.5*brushDiameter)+'px');
 			$('.chalk').css('top',(mouseY-0.5*brushDiameter)+'px');
 			if(mouseD){
-				if(eraser){
-					erase(mouseX,mouseY);
-				}else{
-					count++;
-    				sum+=mouseX;				
-					draw(mouseX,mouseY);
-					}
-				}
+				count++;
+				sum+=mouseX;				
+				draw(mouseX,mouseY);
+			}
+			
 		}else{
 			$('.chalk').css('top',height-10);
 			}
@@ -153,25 +156,17 @@ function chalkboard(){
 		mouseD = true;
 		xLast = mouseX;
 		yLast = mouseY;
-		if(evt.button == 2){
-			erase(mouseX,mouseY);
-			eraser = true;
-			$('.chalk').addClass('eraser');
-		}else{
-			if(!$('.panel').is(':hover')){
-				draw(mouseX+1,mouseY+1);
-			}	
-			reset();	
-		}
+		
+		if(!$('.panel').is(':hover')){
+			draw(mouseX+1,mouseY+1);
+		}	
+		reset();	
+		
 	});
 
 	$(document).mouseup(function(evt){ 
 		console.log("mouseup");
 		mouseD = false;
-		if(evt.button == 2){
-			eraser = false;
-			$('.chalk').removeClass('eraser');
-		}
 		showResult();
 	});
 	
@@ -181,7 +176,7 @@ function chalkboard(){
 
 		var c=document.getElementById("chalkboard");
 		var ctx=c.getContext("2d");
-		ctx.strokeStyle = 'rgba(2, 136, 77, 1.0)';
+		ctx.strokeStyle = 'rgba(2, 136f, 77, 1.0)';
 		ctx.fillStyle = 'rgba(2, 136, 77, 1.0)';
 		ctx.fillRect(100,300,189,200);
 		ctx.stroke();
@@ -244,7 +239,7 @@ function chalkboard(){
 	document.oncontextmenu = function() {return false;};
          
 	function draw(x,y){
-		ctx.strokeStyle = 'rgba(255,255,255,'+(0.4+Math.random()*0.2)+')';
+		ctx.strokeStyle = 'rgba(2, 136, 77,'+(0.4+Math.random()*0.2)+')';
 		ctx.beginPath();
   		ctx.moveTo(xLast, yLast);		
   		ctx.lineTo(x, y);
@@ -266,8 +261,25 @@ function chalkboard(){
 		yLast = y;
 	}
 
-	function erase(x,y){
-		ctx.clearRect (x-0.5*eraserWidth,y-0.5*eraserHeight,eraserWidth,eraserHeight);
+	function drawChalkLine(x,y, x2,y2,color){
+
+		ctx.strokeStyle = 'rgba(255,255,255,'+(0.4+Math.random()*0.2)+')';
+		ctx.beginPath();
+  		ctx.moveTo(x2, y2);		
+  		ctx.lineTo(x, y);
+  		ctx.stroke();
+          
+  		// Chalk Effect
+		var length = Math.round(Math.sqrt(Math.pow(x-x2,2)+Math.pow(y-y2,2))/(5/brushDiameter));
+		var xUnit = (x-x2)/length;
+		var yUnit = (y-y2)/length;
+		for(var i=0; i<length; i++ ){
+			var xCurrent = x2+(i*xUnit);	
+			var yCurrent = y2+(i*yUnit);
+			var xRandom = xCurrent+(Math.random()-0.5)*brushDiameter*1.2;			
+			var yRandom = yCurrent+(Math.random()-0.5)*brushDiameter*1.2;
+    		ctx.clearRect( xRandom, yRandom, Math.random()*2+2, Math.random()+1);
+			}
 	}
 
 	$('.link').click(function(evt){
