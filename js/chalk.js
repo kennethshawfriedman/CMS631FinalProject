@@ -199,21 +199,26 @@ function chalkboard(){
 		ctx.fillText("Only 21% of MIT faculty are women", 160, 550);
 		
 		var infoResult;
-		if (guesspercent<21) {
+		
+		var guessInt = guesspercent*100;
+		
+		if (guessInt<21) {
 			infoResult = "It's actually a little better than that.";
-		} else if (guesspercent > 21 && guesspercent<45) {
+		} else if (guessInt > 21 && guessInt<45) {
 			infoResult = "Surprisingly, it's worse than that.";
-		} else if (guesspercent > 45 && guesspercent < 56) {
+		} else if (guessInt > 45 && guessInt < 56) {
 			infoResult = "You think it's around 50/50? Nope.";
-		} else if (guesspercent >56) {
+		} else if (guessInt >56) {
 			infoResult = "You think there are significantly more women than men? No no no.";
+		} else {
+			infoResult = guessInt.toString();
 		}
 		
 		var canvas = document.getElementById("chalkboard");
 		var ctx = canvas.getContext("2d");
-		ctx.font = "30px Arial";
+		ctx.font = "20px Arial";
 		ctx.fillStyle = 'rgba(255, 255, 255, 1.0)';
-		ctx.fillText(infoResult, 400, 1000);
+		ctx.fillText(infoResult, 300, 700);
 	}
 
 	var reset = function(){
