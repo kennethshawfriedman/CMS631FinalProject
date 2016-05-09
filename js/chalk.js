@@ -28,7 +28,7 @@ function chalkboard(){
 	var eraserWidth = 50;
 	var eraserHeight = 100;
 	
-		var c=document.getElementById("chalkboard");
+	var c=document.getElementById("chalkboard");
 	var ctx=c.getContext("2d");
 	ctx.beginPath();
 	ctx.strokeStyle = 'rgba(255, 255, 255, 1.0)';
@@ -113,6 +113,20 @@ function chalkboard(){
     document.addEventListener('touchend', function(evt) {
     	console.log('touchend');
         mouseD = false;
+        
+        var average = sum/count;
+		var guesspercent = (average-100)/900
+		
+		var c=document.getElementById("chalkboard");
+		var ctx=c.getContext("2d");
+		ctx.beginPath();
+		ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
+		ctx.lineWidth = 10;
+		ctx.moveTo(100,200);
+		ctx.lineTo(100,600);
+		ctx.stroke();
+	
+   
     }, false);
     $('#chalkboard').css('cursor','none');
 	ctx.fillStyle = 'rgba(255,255,255,0.5)';	
@@ -158,6 +172,9 @@ function chalkboard(){
 			eraser = false;
 			$('.chalk').removeClass('eraser');
 		}
+		
+		
+		
 	});
 
 	$(document).keyup(function(evt){
