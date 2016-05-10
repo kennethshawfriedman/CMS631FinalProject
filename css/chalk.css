@@ -24,10 +24,20 @@ p {
 	z-index: 3;
 }
 
+.abs{
+	position: 	absolute;	
+}
+
+.nextButton {
+	top: 100px;
+	left:500px;
+}
+
 
 .notation {
 	position: absolute;
 	font-size: 25px;
+	z-index: 4;
 }
 #wipe {
 	position: absolute;
