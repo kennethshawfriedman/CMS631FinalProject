@@ -6,8 +6,6 @@
 // So long as you are nice to people, etc
 
 
-$('body').prepend('<div id="background"></div>');
-
 function addText(text, xloc, yloc){
   var newElement = $("<p>", {class:"notation"});
   newElement.text(text);
@@ -128,7 +126,15 @@ function init() {
   canvas.onmouseup = myUp;
   canvas.ondblclick = myDblClick;
   
-  // add custom initialization here:
+
+  $("#canvas").mousemove(function(e){
+    myMove(e);
+  });
+
+  var percentText = $("<p>", {id:"percent", class:"notation"});
+  percentText.css({"left": "500px", "right": "500px"});
+  percentText.text("temp");
+  $("body").prepend(percentText);
   
   // add an orange rectangle
   addRect(200, 200, 40, 40, '#FFC02B');
@@ -152,14 +158,19 @@ var pc = {
 function pieChart(){
 
   drawChalkArc(ctx,200,200,107,0,2* Math.PI, false);
-  drawChalkArc(ctx,200,200,100,0,Math.PI, true);
 }
 
 function drawHandle(){
-  var mr = Math.sqrt((my*my+mx*mx));
-  var y = my* pc.r/mr;
-  var x = mx *pc.r/mr;
-  drawChalkArc(ctx,pc.x+ x,pc.y+ y,20,0,2*Math.PI,true);
+  var dx = mx-pc.x;
+  var dy = my-pc.y;
+  console.log("pc.x and pc.y:"+pc.x.toString() + ":"+pc.y.toString());
+  console.log("dx:"+dx.toString());
+  console.log("dy:"+dy.toString());
+  var angle = Math.atan2(-dx, dy) + Math.PI/2;
+  console.log(angle*180/Math.PI);
+  $("#percent").text(parseInt((angle*100/(2*Math.PI)+25))+ "%");
+  drawChalkArc(ctx,200,200,100,-Math.PI/2,angle, true);
+  // drawChalkArc(ctx,pc.x+x,pc.y+ y,20,0,2*Math.PI,true);
 }
 
 // While draw is called as often as the INTERVAL variable demands,
@@ -239,19 +250,18 @@ function drawChalkLine(context,x,y, x2,y2){
     }
 }
 
-$("#canvas").mousemove(function(){
-  console.log("mousemove");
-});
-
 function drawChalkArc(context,x,y,r,sAngle,eAngle, fill){
   context.lineWidth = brushDiameter;
   context.strokeStyle = 'rgba(0,255,255,'+(0.4+Math.random()*0.2)+')';
   context.beginPath(); 
-  context.arc(x,y,r,sAngle,eAngle);
   if (fill){
+    context.moveTo(pc.x, pc.y);
+    context.arc(x,y,r,sAngle,eAngle);
+    context.closePath();
     context.fillStyle="white";
     context.fill();
   }else{
+    context.arc(x,y,r,sAngle,eAngle);
     context.stroke();
   }
   
@@ -271,15 +281,8 @@ function drawChalkArc(context,x,y,r,sAngle,eAngle, fill){
 
 // Happens when the mouse is moving inside the canvas
 function myMove(e){
-  if (isDrag){
-    getMouse(e);
-    
-    mySel.x = mx - offsetx;
-    mySel.y = my - offsety;   
-    
-    // something is changing position so we better invalidate the canvas!
-    invalidate();
-  }
+  // console.log(e);
+  getMouse(e);
   invalidate();
 }
 

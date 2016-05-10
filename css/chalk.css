@@ -10,7 +10,7 @@ html,body{
 	padding:0;
 	height:100%;
 	overflow:hidden;
-	cursor:none;
+	/*cursor:none;*/
 	background-color: #333;
 	/*display: flex;
   	justify-content: center;*/
