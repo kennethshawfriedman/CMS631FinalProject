@@ -33,10 +33,22 @@ function chalkboard(){
 	ctx.lineWidth = brushDiameter;
 	ctx.lineCap = 'round';
 	
-	var drawLinearScale = function(){
+	var questionTexts = [];
+
+	var addText =  function(text, xloc, yloc){
+		var newElement = $("<p>", {class:"notation"});
+		newElement.text(text);
+		newElement.css({"left":xloc.toString()+"px", "top": yloc.toString()+"px"});
+		$("body").append(newElement);
+		questionTexts.push(newElement);
+	};
+
+	addText("WOMEN ARE COOL!", 100,150);
+
+	var drawSliderQuestion = function(xloc,yloc, width){
 		ctx.lineWidth = 10;
-		var left = 100;
-		var top = 200;
+		var left = xloc;
+		var top = yloc;
 		var scaleWidth = 900;
 		var scaleHeight = 200;
 		var right = left+scaleWidth;
@@ -56,7 +68,7 @@ function chalkboard(){
 		// ctx.stroke();
 	};
 	
-	drawLinearScale();
+	// drawLinearScale();
 
 	var drawQuestion = function (){
 		ctx.font = "20px Arial";
