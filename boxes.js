@@ -143,19 +143,23 @@ function clear(c) {
 }
 
 
-function Handle(){
-  this.x = 0;
-  this.y = 0;
-  this.r = 20;
-  this.
-}
-var handle;
+var pc = {
+    x:200,
+    y:200,
+    r:100
+  };
+
 function pieChart(){
 
   drawChalkArc(ctx,200,200,107,0,2* Math.PI, false);
   drawChalkArc(ctx,200,200,100,0,Math.PI, true);
-  drawChalkArc(ctx,100,200,20,0,2*Math.PI,true);
-  handle
+}
+
+function drawHandle(){
+  var mr = Math.sqrt((my*my+mx*mx));
+  var y = my* pc.r/mr;
+  var x = mx *pc.r/mr;
+  drawChalkArc(ctx,pc.x+ x,pc.y+ y,20,0,2*Math.PI,true);
 }
 
 // While draw is called as often as the INTERVAL variable demands,
@@ -188,6 +192,7 @@ function draw() {
     
     // Add stuff you want drawn on top all the time here
     pieChart();
+    drawHandle();
     
     canvasValid = true;
   }
@@ -234,6 +239,10 @@ function drawChalkLine(context,x,y, x2,y2){
     }
 }
 
+$("#canvas").mousemove(function(){
+  console.log("mousemove");
+});
+
 function drawChalkArc(context,x,y,r,sAngle,eAngle, fill){
   context.lineWidth = brushDiameter;
   context.strokeStyle = 'rgba(0,255,255,'+(0.4+Math.random()*0.2)+')';
@@ -271,6 +280,7 @@ function myMove(e){
     // something is changing position so we better invalidate the canvas!
     invalidate();
   }
+  invalidate();
 }
 
 // Happens when the mouse is clicked in the canvas
