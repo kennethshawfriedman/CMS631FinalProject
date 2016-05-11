@@ -242,7 +242,8 @@ function draw() {
 			case TYPE.PIECHART:
 				pieChart();
 				drawHandle();
-				addText("What fraction of presidents of the technology clubs do you think are women?", 0, 0);
+				addText("Question "+(mode + 1).toString() +" of 3",0,0);
+				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50);
 				addText("Click to Set", 100, 100);
 				addText("Your Guess:", 800, 200);
 				if (isSet) {
@@ -250,17 +251,26 @@ function draw() {
 					addText(targetValue, 100, 300, "red");
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
 
-					var nextButton = $("<img>",{id:"next", class:"button fade-in", src:"arrow.png"});
+					var nextButton = $("<img>",{id:"next", class:"abs nextButton", src:"arrow.png", onclick:"nextMode()"});
 
 					$("body").append(nextButton);
+					questionTexts.push(nextButton);
 				} else {
 					$("#feedback").text("");
-					// invalidate()
 				}
-				// console.log("waddup");
+				
 				
 				break;
 			case TYPE.TWOAXIS:
+				drawChalkLine(ctx,100,100,100,600); // y axis
+				drawChalkLine(ctx,100,100,120,130); //arrow head
+				drawChalkLine(ctx,100,100,80,130);
+				drawChalkLine(ctx,100,600,800,600); // x axis
+				drawChalkLine(ctx,800,600,770,620);// arrow head
+				drawChalkLine(ctx,800,600,770,580);
+				// addText("")F
+				addText("o shit waddup",400,700, "#00FFFF");
+				addText("mouseposition:"+mx+","+ my, 600,600,"#00FFFF");
 				break;
 			case TYPE.SLIDER:
 				break
@@ -269,6 +279,11 @@ function draw() {
 
 		canvasValid = true;
 	}
+}
+
+function nextMode(){
+	mode++;
+	invalidate();
 }
 
 // Draws a single shape to a single context
@@ -355,6 +370,8 @@ function myMove(e) {
 			}
 			break;
 		case TYPE.TWOAXIS:
+				getMouse(e);
+				// invalidate();
 			break;
 		case TYPE.SLIDER:
 			break
