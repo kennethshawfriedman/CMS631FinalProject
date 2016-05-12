@@ -107,11 +107,10 @@ function chalkboard(){
 		ctx.fillText("Draw a line to show your belief.",350,100);
 		
 	}
-
 	
-		
 	$('#chalkboard').css('cursor','none');
 	document.onselectstart = function(){ return false; };
+	
 	ctx.fillStyle = 'rgba(255,255,255,0.5)';	
 	ctx.strokeStyle = 'rgba(255,255,255,0.5)';	
     ctx.lineWidth = brushDiameter;

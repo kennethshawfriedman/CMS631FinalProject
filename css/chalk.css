@@ -47,7 +47,7 @@ p {
 	color: black;
 }
 
-#chalkboard{
+.chalkboard{
 	position:absolute;
 	top:0;
 	left:0;
