@@ -290,6 +290,10 @@ function draw() {
 					  transform: "translate(-50%, -50%)"});
 				titleElement.append($("<p>").text("TODAY'S LECTURE:"));
 				titleElement.append($("<p>").text("Gender Diversity at MIT"));
+				var instructionText = $("<p>");
+				instructionText.css({"font-size": "150%", color:colors.orange});
+				instructionText.text("Let's see what you think about the current status of undergradaute women at MIT.");
+				titleElement.append(instructionText);
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
 
@@ -299,20 +303,27 @@ function draw() {
 				pieChart();
 				drawHandle();
 				addText("Question 1 of 3",0,0);
-				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50);
-				addText("Click to Set", 100, 500, {color:colors.cyan});
+				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50, {color: colors.orange});
+				
 				addText("Your Guess:", 800, 200);
 				if (isSet) {
 					addText("Actual:", 100, 200);
-					addText(targetValue, 100, 300, {color:"red"});
-					addText(percentValue+"%", 800, 300, {color:"white"});
+					addText(targetValue, 125, 230, {color:"red"});
+					
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
 
 					nextReveal();
 				} else {
+					addText("Click to Set", 100, 150, {color:colors.cyan});
+					var position = [100,250];
+					var size = [200,50]
+					var tailPercent = 0.75;
+					var thickness = 25;
+					drawArrow(ctx,position[0], position[1], size[0], size[1], thickness, tailPercent, colors.cyan);
 					// $("#feedback").text("");
-					addText(percentValue+"%", 800, 300, {color:"white"});
+					// addText(percentValue+"%", 800, 300, {color:"white"});
 				}
+				addText(percentValue+"%", 825, 230, {color:"white"});
 				
 				
 				break;
@@ -452,7 +463,7 @@ function draw() {
 				
 				if (graphSubmit){
 					drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,colors.green);
-					addText("Actual Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:colors.green, "font-size":"100%"});
+					addText("Actual Faculty *", legendOrigin[0]+ textOffset.x, yMarker-10,{color:colors.green, "font-size":"100%"});
 					drawGraphData(fYears,faculty,"#228B22");// faculty
 					addText("Retry", 955, 260, {"color":'#FFFF00'});
 					drawChalkLine(ctx, 940, 240, 1060, 240,'#FFFF00');
@@ -466,13 +477,14 @@ function draw() {
 					var margin = 3;
 					var responseText = "TEMP";
 					if(average < facultyTarget - margin){
-						responseText = "There are actually more women faculty than that, but it's still a low number.";
+						responseText = "Good try, but there are actually more women faculty than that, but it's still a low number.";
 					}else if(average >facultyTarget +margin){
-						responseText = "There are less women faculty than that";
+						responseText = "Good try, but unfortunately there are less women faculty than that";
 					}else{
 						responseText = "You guessed about the right percentage of women faculty.";
 					}
 					addText(responseText ,900,350,{color:colors.orange, width:"25%"});
+					addText("*There is limited data on a short range for this series",900,500,{color:colors.green,width:"25%", "font-size": "100%"});
 					nextReveal();
 				}else{
 					savePath = []
@@ -757,7 +769,6 @@ function drawArrow(context,x,y, xlen, ylen, thickness, tailPercent,color){
 	drawChalkLine(context, six[0],six[1],seven[0],seven[1], color);
 	drawChalkLine(context, seven[0],seven[1],one[0],one[1], color);
 
-	addText("Next",x+ xlen/2, y+ylen/2,{transform:"translate(-50%,-50%)", color: color, "font-size": "200%"});
 	
 }
 
@@ -877,6 +888,8 @@ function nextReveal(){
 	var thickness = 50;
 	var tailPercent = .75;
 	drawArrow(ctx,position[0], position[1], size[0], size[1], thickness, tailPercent, colors.orange);
+	addText("Next",position[0]+ size[0]/2, position[1]+size[1]/2,{transform:"translate(-50%,-50%)", color: colors.orange, "font-size": "200%"});
+
 	$(document).mousedown(function(evt){
 
 		mouseX = evt.pageX;
