@@ -328,17 +328,22 @@ function draw() {
 				addText("0%", 100, 460);
 				addText("100%", 750, 460);
 				length = 100
+				
 				//drawFirstBox
 				if (s1p == -1) {
 					drawBox(ctx, 400, 250, length);
+					addText("Men", 420, 255);
 				} else {
-					drawBox(ctx, s1p, 250, length)
+					drawBox(ctx, s1p, 250, length);
+					addText("Men", s1p+20, 255);
 				}
 				
 				if (s2p == -1) {
 					drawBox(ctx, 400, 450, length);
+					addText("Women", 400, 455);
 				} else {
 					drawBox(ctx, s2p, 450, length)
+					addText("Women", s2p, 455);
 				}
 				
 				$(document).mousedown(function(evt){
@@ -357,13 +362,13 @@ function draw() {
 						
 						if (mouseY <= 350 && mouseY >= 250 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
-							drawBox(ctx, mouseX, 250, length);
-							drawBox(ctx, s2p, 450, length);
+							//drawBox(ctx, mouseX, 250, length);
+							//drawBox(ctx, s2p, 450, length);
 							s1p = mouseX;
 						} else if (mouseY <= 550 && mouseY >= 450 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
-							drawBox(ctx, s1p, 250, length);
-							drawBox(ctx, mouseX, 450, length);
+							//drawBox(ctx, s1p, 250, length);
+							//drawBox(ctx, mouseX, 450, length);
 							s2p = mouseX;
 						}
 					}
