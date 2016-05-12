@@ -241,13 +241,9 @@ function drawHandle() {
 		angleValue = Math.atan2(-dx, dy) - Math.PI;
 		// percentValue = angleValue;
 		percentValue = parseInt(Math.round((angleValue * 100 / (2 * Math.PI) + 100)));
-<<<<<<< HEAD
 		$("#percent").text(percentValue + "%");
 		pipercent = percentValue;
-=======
 		// $("#percent").text(percentValue + "%");
-
->>>>>>> 77e728cf11d6ce7e270fd0f27ab4b01e48f20e94
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
 	} else {
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
@@ -306,9 +302,9 @@ function draw() {
 				drawHandle();
 				addText("Question 1 of 3",0,0);
 				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50);
-				addText("Click to Set", 100, 500, {color:colors.cyan});
+				addText("Click to Set", 100, 100, {color:colors.cyan});
 				addText("Your Guess:", 800, 200);
-				addText(pipercent, 800, 250, {'color':'#FFFF00'})
+				//addText(pipercent, 800, 250, {'color':'#FFFF00'})
 				if (isSet) {
 					addText("Actual:", 100, 200);
 					addText(targetValue, 100, 300, {color:"red"});
