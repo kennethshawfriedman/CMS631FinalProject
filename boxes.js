@@ -15,6 +15,7 @@ document.onselectstart = function(){ return false; };
 
 s1p = 400; //slider 1 position
 s2p = 400; //slider 2 position
+sliderSubmitCheck = false;
 
 function addText(text, xloc, yloc, style){
 	var newElement = $("<p>", {class:"notation"});
@@ -82,8 +83,8 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
 
-var mode = TYPE.TWOAXIS;
-// var mode = TYPE.SLIDER;
+//var mode = TYPE.TWOAXIS;
+ var mode = TYPE.SLIDER;
 
 
 var isSet = false;
@@ -419,7 +420,7 @@ function draw() {
 				addText("100%", 810, 260);
 				addText("0%", 70, 460);
 				addText("100%", 810, 460);
-				length = 100;	
+				length = 100;
 				drawBox(ctx, s1p, 250, length);
 				addText("Men", s1p+20, 255);
 				drawBox(ctx, s2p, 450, length);
@@ -427,9 +428,27 @@ function draw() {
 				
 				addText(parseInt((s1p-100)*1.17/7.0).toString(), s1p+30, 305);
 				addText(parseInt((s2p-100)*1.17/7.0).toString(), s2p+30, 505);
+				
+				addText("Move both sliders, then hit submit to compare to the actual results.", 900, 100, {'font-size':'100%', 'max-width':'200px', 'color':'#00FFFF'});
+				addText("Submit", 955, 260, {"color":'#FFFF00'});
+				
+				drawChalkLine(ctx, 940, 240, 1060, 240,'#FFFF00');
+				drawChalkLine(ctx, 940, 305, 1060, 305,'#FFFF00');
+				drawChalkLine(ctx, 940, 240, 940, 305,'#FFFF00');
+				drawChalkLine(ctx, 1060, 240, 1060, 305,'#FFFF00');
+// 				drawBox(ctx, 950, 225, 100);
 
 				$(document).mousedown(function(evt){
 					mouseD = true;
+					
+					if (!sliderSubmitCheck) {
+						mouseX = evt.pageX;
+						mouseY = evt.pageY;
+						if (mouseX>=940 && mouseX <=1060 && mouseY >=240 && mouseY <=305) {
+							showSliderResults(ctx)
+						}
+					}
+					
 				});
 				
 				$(document).mouseup(function(evt){
@@ -443,6 +462,7 @@ function draw() {
 						if (mouseY <= 350 && mouseY >= 250 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
 							s1p = mouseX;
+							console.log(mouseX);
 						} else if (mouseY <= 550 && mouseY >= 450 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
 							s2p = mouseX;
@@ -453,6 +473,11 @@ function draw() {
 		}
 		canvasValid = true;
 	}
+}
+
+function showSliderResults(ctx) {
+	drawBox(ctx, 155, 250, 100, "#FF0000");
+	drawBox(ctx, 229, 450, 100, "#FF0000");
 }
 
 function nextMode(){
@@ -492,7 +517,7 @@ function drawChalkLine(context, x, y, x2, y2,color) {
 		};
 	}
 	
-	console.log(color);
+	//console.log(color);
 
 	context.strokeStyle = 'rgba('+color.r+','+color.g+','+color.b+',' + (0.4 + Math.random() * 0.2) + ')';
 	context.beginPath();
@@ -537,11 +562,11 @@ function drawChalk(x,y){
 		yLast = y;
 	}
 
-function drawBox(context, x, y, length) {
-	drawChalkLine(context, x, y, x, y+length);
-	drawChalkLine(context, x, y+length, x+length, y+length);
-	drawChalkLine(context, x+length, y+length, x+length, y);
-	drawChalkLine(context, x+length, y, x, y);
+function drawBox(context, x, y, length, color) {
+	drawChalkLine(context, x, y, x, y+length, color);
+	drawChalkLine(context, x, y+length, x+length, y+length, color);
+	drawChalkLine(context, x+length, y+length, x+length, y, color);
+	drawChalkLine(context, x+length, y, x, y, color);
 }
 
 function drawChalkArc(context, x, y, r, sAngle, eAngle, fill, color) {
