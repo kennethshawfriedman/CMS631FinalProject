@@ -449,7 +449,6 @@ function draw() {
 						if (mouseY <= 350 && mouseY >= 250 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
 							s1p = mouseX;
-							console.log(mouseX);
 						} else if (mouseY <= 550 && mouseY >= 450 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
 							s2p = mouseX;
@@ -465,6 +464,25 @@ function draw() {
 function showSliderResults(ctx) {
 	drawBox(ctx, 319, 250, 100, "#FF0000");
 	drawBox(ctx, 620, 450, 100, "#FF0000");
+	
+	percent1 = parseInt((s1p-100)*1.17/28.0);
+	percent2 = parseInt((s2p-100)*1.17/28.0);
+	diff = (percent2)/percent1;
+	
+	var response;
+	
+	if (diff>1) {
+		if (diff>2.1 && diff < 2.5) {
+			response ="Yeah, you get the problem."
+		} else {
+			response = "You understand more women feel this way, but your ratio is off."
+		}
+	} else {
+		response = "Actually, a much higher percentage of women feel this way than men."
+		//actually women feel much less capable
+	}
+	response += " Over 20% of women do not feel capable compared to their peers. This is 2x higher than in men.";
+	addText(response, 900, 360, {"font-size":"100%", "color":"red"})
 }
 
 function nextMode(){
