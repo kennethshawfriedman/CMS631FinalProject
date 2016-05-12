@@ -8,14 +8,26 @@ var TYPE = {
 	INTRO: 0,
 	PIECHART: 1,
 	TWOAXIS: 2,
-	SLIDER:3
-}
+	SLIDER:3,
+	FINAL:4
+};
+
+var colors = {
+	white: "#FFFFFF",
+	green: "#228B22",
+	cyan: "#00FFFF",
+	yellow: "#FFFF00",
+	orange: "#FFC02B",
+	red: ""
+};
 
 document.onselectstart = function(){ return false; };
 
 s1p = 400; //slider 1 position
 s2p = 400; //slider 2 position
-sliderSubmitCheck = false;
+var sliderSubmitCheck = false;
+var graphSubmit = false;
+var savePath = [];
 
 function addText(text, xloc, yloc, style){
 	var newElement = $("<p>", {class:"notation"});
@@ -83,8 +95,8 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
 
-//var mode = TYPE.TWOAXIS;
- var mode = TYPE.SLIDER;
+var mode = TYPE.TWOAXIS;
+ // var mode = TYPE.SLIDER;
 
 
 var isSet = false;
@@ -328,14 +340,24 @@ function draw() {
 				$(document).mousedown(function(evt){
 					console.log("mousedown");
 
-					// playback
 					mouseD = true;
 					xLast = mouseX;
 					yLast = mouseY;
 					
+					
+						mouseX = evt.pageX;
+						mouseY = evt.pageY;
+						if (mouseX>=940 && mouseX <=1060 && mouseY >=240 && mouseY <=305) {
+							graphSubmit = !graphSubmit;
+							invalidate();
+						}
+	
+
 					if(!$('.panel').is(':hover')){
 						drawChalk(mouseX+1,mouseY+1);
-					}	
+					}
+
+
 					
 				});
 
@@ -346,6 +368,15 @@ function draw() {
 				function yearToX(year){
 					return chartOrigin[0]+ ((year - graphDim.xmin)/(graphDim.xmax - graphDim.xmin) )*chartLength[0];
 				};
+
+				function toYear(x){
+					return (x-chartOrigin[0])/chartLength[0] * (graphDim.xmax-graphDim.xmin) + graphDim.xmin;
+				}
+
+				function toData(y){
+					return (y - chartOrigin[1])/chartLength[1] * (graphDim.ymax-graphDim.ymin) + graphDim.ymin;
+				}
+
 				function dataToY(data){
 					return chartOrigin[1] - ((data- graphDim.ymin)/(graphDim.ymax - graphDim.ymin) )*chartLength[1];
 				};
@@ -358,10 +389,9 @@ function draw() {
 
 
 				drawGraphData(uYears,undergrad,"#FFFF00"); //undergrad
-				drawGraphData(fYears,faculty,"#228B22");// faculty
 
 				//Title
-				addText("Percent Women", (chartOrigin[0] + chartLength[0])/2 , (chartOrigin[1] - chartLength[1])/2,{color:"#00FFFF"});
+				addText("Given this plot of the percent of the undergraduate population that are women, draw the line that you think represents the percent of the faculty population that are women.", chartOrigin[0] + 70 , (chartOrigin[1] - chartLength[1])/2,{color:colors.orange, width:"50%"});
 				
 				// X label
 				addText("Year", (chartOrigin[0] + chartLength[0])/2, chartOrigin[1]+ 50,{color:"#00FFFF"});
@@ -385,7 +415,7 @@ function draw() {
 				var sLength = chartLength[0]/lines;
 				for (var i = 0; i <lines; i++){
 					drawChalkLine(ctx,sPoint,dataToY(50), sPoint + sLength-50 ,dataToY(50),"#00FFFF");
-					sPoint = sPoint +sLength;
+					sPoint = sPoint + sLength;
 				}
 
 				//legend
@@ -394,18 +424,50 @@ function draw() {
 				var yStep = 30;
 				var lineLength = 100;
 				var textOffset = {x: 110};
-				addText("Legend:",legendOrigin[0], legendOrigin[1]);
+				addText("Legend:",legendOrigin[0], legendOrigin[1],{color:colors.cyan});
 
-				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,"#FFFF00");
-				addText("Undergrad", legendOrigin[0]+ textOffset.x, yMarker-10,{color:"#FFFF00", "font-size":"100%"});
+				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,colors.yellow);
+				addText("Undergrad", legendOrigin[0]+ textOffset.x, yMarker-10,{color:colors.yellow, "font-size":"100%"});
 				yMarker = yMarker +yStep;
 
-				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,"#228B22");
-				addText("Actual Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:"#228B22", "font-size":"100%"});
-
+				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,colors.white);
+				addText("Your Guess Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:colors.white, "font-size":"100%"});
 				yMarker = yMarker +yStep;
-				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,"#FFFFFF");
-				addText("Your Guess Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:"#FFFFFF", "font-size":"100%"});
+				
+				if (graphSubmit){
+					drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,colors.green);
+					addText("Actual Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:colors.green, "font-size":"100%"});
+					drawGraphData(fYears,faculty,"#228B22");// faculty
+					addText("Retry", 955, 260, {"color":'#FFFF00'});
+					drawChalkLine(ctx, 940, 240, 1060, 240,'#FFFF00');
+					drawChalkLine(ctx, 940, 305, 1060, 305,'#FFFF00');
+					drawChalkLine(ctx, 940, 240, 940, 305,'#FFFF00');
+					drawChalkLine(ctx, 1060, 240, 1060, 305,'#FFFF00');
+					var filteredPath = cropLineToPlot(savePath,chartOrigin,chartLength);
+					playback(filteredPath,colors.white);
+					var average = parseInt(-1*toData(averageValue(filteredPath)));
+					var facultyTarget = 14;
+					var margin = 3;
+					var responseText = "TEMP";
+					if(average < facultyTarget - margin){
+						responseText = "There are actually more women faculty than that, but it's still a low number.";
+					}else if(average >facultyTarget +margin){
+						responseText = "There are less women faculty than that";
+					}else{
+						responseText = "You guessed about the right percentage of women faculty.";
+					}
+					addText(responseText ,900,350,{color:colors.orange, width:"25%"});
+					// addText(slope(filteredPath[filteredPath.length-1]),900, 600,colors.white);
+				}else{
+					savePath = []
+					addText("Submit", 955, 260, {"color":'#FFFF00'});
+					drawChalkLine(ctx, 940, 240, 1060, 240,'#FFFF00');
+					drawChalkLine(ctx, 940, 305, 1060, 305,'#FFFF00');
+					drawChalkLine(ctx, 940, 240, 940, 305,'#FFFF00');
+					drawChalkLine(ctx, 1060, 240, 1060, 305,'#FFFF00');	
+				}
+				
+				
 
 
 
@@ -517,8 +579,6 @@ function drawChalkLine(context, x, y, x2, y2,color) {
 		};
 	}
 	
-	//console.log(color);
-
 	context.strokeStyle = 'rgba('+color.r+','+color.g+','+color.b+',' + (0.4 + Math.random() * 0.2) + ')';
 	context.beginPath();
 	context.moveTo(x2, y2);
@@ -543,7 +603,7 @@ function drawChalk(x,y){
 		ctx.beginPath();
   		ctx.moveTo(xLast, yLast);		
   		ctx.lineTo(x, y);
-  		// savedGesture.push({"x1":xLast,"y1": yLast, "x2":x, "y2":y});
+  		savePath.push({"x1":xLast,"y1": yLast, "x2":x, "y2":y});
   		ctx.stroke();
           
   		// Chalk Effect
@@ -561,6 +621,51 @@ function drawChalk(x,y){
 		xLast = x;
 		yLast = y;
 	}
+
+function playback(savedShape, color){
+	$.each(savedShape, function(index, value){
+		drawChalkLine(ctx,value.x1,value.y1, value.x2, value.y2, color);
+	});
+};
+
+function cropLineToPlot(savedShape, chartOrigin, chartLength){
+	var filteredShape = [];
+	$.each(savedShape, function(index,value){
+		if(!( value.x1 <= chartOrigin[0] ||
+			value.x1 >= (chartOrigin[0] + chartLength[0]) ||
+			value.y1 >=chartOrigin[1] || 
+			value.y1 <= chartOrigin[1] - chartLength[1])){
+			filteredShape.push(value);
+		}
+	});
+	return filteredShape;
+}
+
+function averageValue(savedShape){
+	var sum = 0;
+	$.each(savedShape, function(index, value){
+		sum+= value.y1;
+	});
+	return sum/savedShape.length;
+}
+
+function slope(value){
+	return (value.y1 - value.y2)/(value.x2 -value.x1);
+}
+
+function maxValue(savedShape) {
+	var max = 0;
+	$.each(savedShape, function(index, value){
+		if( value.y2 < max){
+			max = value.y2;
+		}
+		if( value.y1 < max){
+			max = value.y1;
+		}
+	});
+
+	return max;
+}
 
 function drawBox(context, x, y, length, color) {
 	drawChalkLine(context, x, y, x, y+length, color);
