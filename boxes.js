@@ -240,7 +240,8 @@ function drawHandle() {
 		angleValue = Math.atan2(-dx, dy) - Math.PI;
 		// percentValue = angleValue;
 		percentValue = parseInt(Math.round((angleValue * 100 / (2 * Math.PI) + 100)));
-		$("#percent").text(percentValue + "%");
+		// $("#percent").text(percentValue + "%");
+
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
 	} else {
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
@@ -287,8 +288,8 @@ function draw() {
 					  left: "50%",
 					  "z-index": "4",
 					  transform: "translate(-50%, -50%)"});
-				titleElement.append($("<p>").text("TODAY'S LECTURE"));
-				titleElement.append($("<p>").text("Diversity at MIT"));
+				titleElement.append($("<p>").text("TODAY'S LECTURE:"));
+				titleElement.append($("<p>").text("Gender Diversity at MIT"));
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
 
@@ -299,16 +300,18 @@ function draw() {
 				drawHandle();
 				addText("Question 1 of 3",0,0);
 				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50);
-				addText("Click to Set", 100, 100);
+				addText("Click to Set", 100, 500, {color:colors.cyan});
 				addText("Your Guess:", 800, 200);
 				if (isSet) {
 					addText("Actual:", 100, 200);
 					addText(targetValue, 100, 300, {color:"red"});
+					addText(percentValue+"%", 800, 300, {color:"white"});
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
 
 					nextReveal();
 				} else {
-					$("#feedback").text("");
+					// $("#feedback").text("");
+					addText(percentValue+"%", 800, 300, {color:"white"});
 				}
 				
 				
