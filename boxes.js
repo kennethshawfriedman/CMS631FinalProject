@@ -398,7 +398,7 @@ function draw() {
 				addText("100%", 810, 260);
 				addText("0%", 70, 460);
 				addText("100%", 810, 460);
-				length = 100;	
+				length = 100;
 				drawBox(ctx, s1p, 250, length);
 				addText("Men", s1p+20, 255);
 				drawBox(ctx, s2p, 450, length);
@@ -406,6 +406,9 @@ function draw() {
 				
 				addText(parseInt((s1p-100)*1.17/7.0).toString(), s1p+30, 305);
 				addText(parseInt((s2p-100)*1.17/7.0).toString(), s2p+30, 505);
+				
+				addText("Submit", 855, 360);
+				drawBox(ctx, 850, 325, 100);
 
 				$(document).mousedown(function(evt){
 					mouseD = true;
