@@ -95,7 +95,7 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
 
-var mode = TYPE.TWOAXIS;
+var mode = 0;
  // var mode = TYPE.SLIDER;
 
 
@@ -175,7 +175,7 @@ function init() {
 	// double click is for making new boxes
 	canvas.onmousedown = myDown;
 	canvas.onmouseup = myUp;
-	canvas.ondblclick = myDblClick;
+	// canvas.ondblclick = myDblClick;
 
 	$("#canvas").mousemove(function(e) {
 		myMove(e);
@@ -279,10 +279,25 @@ function draw() {
 		// Add stuff you want drawn on top all the time here
 		console.log(mode);
 		switch (mode) {
+			case TYPE.INTRO:
+				var titleElement = $("<div>");
+				titleElement.css({
+					  position: "fixed",
+					  top: "50%",
+					  left: "50%",
+					  "z-index": "4",
+					  transform: "translate(-50%, -50%)"});
+				titleElement.append($("<p>").text("TODAY'S LECTURE"));
+				titleElement.append($("<p>").text("Diversity at MIT"));
+				$("body").append(titleElement);
+				questionTexts.push(titleElement);
+
+				nextReveal();
+				break;
 			case TYPE.PIECHART:
 				pieChart();
 				drawHandle();
-				addText("Question "+(mode + 1).toString() +" of 3",0,0);
+				addText("Question 1 of 3",0,0);
 				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50);
 				addText("Click to Set", 100, 100);
 				addText("Your Guess:", 800, 200);
@@ -291,10 +306,7 @@ function draw() {
 					addText(targetValue, 100, 300, {color:"red"});
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
 
-					var nextButton = $("<img>",{id:"next", class:"abs nextButton", src:"arrow.png", onclick:"nextMode()"});
-
-					$("body").append(nextButton);
-					questionTexts.push(nextButton);
+					nextReveal();
 				} else {
 					$("#feedback").text("");
 				}
@@ -321,8 +333,9 @@ function draw() {
 				drawChalkLine(ctx,850,600,820,580);
 				// addText("mouseposition:"+mx+","+ my, 600,600,"#00FFFF");
 
-				$('body').prepend('<div class="chalk"></div>');
-
+				var chalkStick = $("<div>", {class:"chalk"});
+				$('body').prepend(chalkStick);
+				questionTexts.push(chalkStick);
 				$(document).mousemove(function(evt){
 				mouseX = evt.pageX;
 				mouseY = evt.pageY;
@@ -353,9 +366,9 @@ function draw() {
 						}
 	
 
-					if(!$('.panel').is(':hover')){
-						drawChalk(mouseX+1,mouseY+1);
-					}
+					// if(!$('.panel').is(':hover')){
+					// 	drawChalk(mouseX+1,mouseY+1);
+					// }
 
 
 					
@@ -457,7 +470,7 @@ function draw() {
 						responseText = "You guessed about the right percentage of women faculty.";
 					}
 					addText(responseText ,900,350,{color:colors.orange, width:"25%"});
-					// addText(slope(filteredPath[filteredPath.length-1]),900, 600,colors.white);
+					nextReveal();
 				}else{
 					savePath = []
 					addText("Submit", 955, 260, {"color":'#FFFF00'});
@@ -531,6 +544,20 @@ function draw() {
 					}
 				});
 				break;
+			case TYPE.FINAL:
+				var titleElement = $("<div>");
+				titleElement.css({
+					  position: "fixed",
+					  top: "50%",
+					  left: "50%",
+					  "z-index": "4",
+					  transform: "translate(-50%, -50%)"});
+				titleElement.append($("<p>").text("FINAL RESULTS HERE"));
+				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append($("<p>").text("LINK to write letter here")));
+
+				$("body").append(titleElement);
+				questionTexts.push(titleElement);
+				break;
 		}
 		canvasValid = true;
 	}
@@ -558,6 +585,7 @@ function showSliderResults(ctx) {
 	}
 	response += " Over 20% of women do not feel capable compared to their peers. This is 2x higher than in men.";
 	addText(response, 900, 360, {"font-size":"100%", "color":"red"})
+	nextReveal();
 }
 
 function nextMode(){
@@ -692,6 +720,34 @@ function drawBox(context, x, y, length, color) {
 	drawChalkLine(context, x+length, y, x, y, color);
 }
 
+function drawRect(context, x, y, xlength, ylength, color) {
+	drawChalkLine(context, x, y, x, y+ylength, color);
+	drawChalkLine(context, x, y+ylength, x+xlength, y+ylength, color);
+	drawChalkLine(context, x+xlength, y+ylength, x+xlength, y, color);
+	drawChalkLine(context, x+xlength, y, x, y, color);
+}
+
+function drawArrow(context,x,y, xlen, ylen, thickness, tailPercent,color){
+	var one = [x,(ylen-thickness)/2+y];
+	var two = [x,one[1]+thickness];
+	var three = [(tailPercent*xlen) + x,two[1]];
+	var four = [three[0], three[1]+ (ylen-thickness)/2];
+	var five = [x+xlen,y+ ylen/2];
+	var six = [four[0],y];
+	var seven = [three[0], y + (ylen-thickness)/2];
+
+	drawChalkLine(context, one[0],one[1],two[0],two[1], color);
+	drawChalkLine(context, two[0],two[1],three[0],three[1], color);
+	drawChalkLine(context, three[0],three[1],four[0],four[1], color);
+	drawChalkLine(context, four[0],four[1],five[0],five[1], color);
+	drawChalkLine(context, five[0],five[1],six[0],six[1], color);
+	drawChalkLine(context, six[0],six[1],seven[0],seven[1], color);
+	drawChalkLine(context, seven[0],seven[1],one[0],one[1], color);
+
+	addText("Next",x+ xlen/2, y+ylen/2,{transform:"translate(-50%,-50%)", color: color, "font-size": "200%"});
+	
+}
+
 function drawChalkArc(context, x, y, r, sAngle, eAngle, fill, color) {
 	if (!color) {
 		color = "white";
@@ -802,6 +858,27 @@ function myDown(e) {
 	invalidate();
 }
 
+function nextReveal(){
+	var position = [800,600];
+	var size = [200,100];
+	var thickness = 50;
+	var tailPercent = .75;
+	drawArrow(ctx,position[0], position[1], size[0], size[1], thickness, tailPercent, colors.orange);
+	$(document).mousedown(function(evt){
+
+		mouseX = evt.pageX;
+		mouseY = evt.pageY;
+		if (mouseX>=position[0] && mouseX <=(position[0]+size[0]) && mouseY >=position[1] && mouseY <=(position[1] + size[1])) {
+			nextMode();
+		}
+	
+
+					
+				});
+	// var nextButton = $("<div>",{id:"next", class:"abs nextButton", src:"arrow.png", onclick:"nextMode()"});
+	// $("body").append(nextButton);
+	// questionTexts.push(nextButton);
+};
 function myUp() {
 	isDrag = false;
 	canvas.onmousemove = null;
@@ -819,6 +896,7 @@ function myDblClick(e) {
 
 function invalidate() {
 	canvasValid = false;
+	$(document).off();
 }
 
 // Sets mx,my to the mouse position relative to the canvas
