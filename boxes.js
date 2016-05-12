@@ -25,6 +25,7 @@ document.onselectstart = function(){ return false; };
 
 s1p = 400; //slider 1 position
 s2p = 400; //slider 2 position
+// pipercent = 50;
 var sliderSubmitCheck = false;
 var graphSubmit = false;
 var savePath = [];
@@ -240,7 +241,8 @@ function drawHandle() {
 		angleValue = Math.atan2(-dx, dy) - Math.PI;
 		// percentValue = angleValue;
 		percentValue = parseInt(Math.round((angleValue * 100 / (2 * Math.PI) + 100)));
-		// $("#percent").text(percentValue + "%");
+		$("#percent").text(percentValue + "%");
+		pipercent = percentValue;
 
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
 	} else {
@@ -289,11 +291,12 @@ function draw() {
 					  "z-index": "4",
 					  transform: "translate(-50%, -50%)"});
 				titleElement.append($("<p>").text("TODAY'S LECTURE:"));
-				titleElement.append($("<p>").text("Gender Diversity at MIT"));
+				titleElement.append($("<p>").text("Gender Disparity at MIT"));
 				var instructionText = $("<p>");
 				instructionText.css({"font-size": "150%", color:colors.orange});
 				instructionText.text("Let's see what you think about the current status of undergradaute women at MIT.");
 				titleElement.append(instructionText);
+
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
 
@@ -306,12 +309,13 @@ function draw() {
 				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50, {color: colors.orange});
 				
 				addText("Your Guess:", 800, 200);
+				// addText(pipercent, 800, 250, {'color':'#FFFF00'})
 				if (isSet) {
 					addText("Actual:", 100, 200);
 					addText(targetValue, 125, 230, {color:"red"});
 					
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
-
+					addText("Your guess was off by "+(pipercent-22).toString()+"%", 800, 350);
 					nextReveal();
 				} else {
 					addText("Click to Set", 100, 150, {color:colors.cyan});
@@ -479,12 +483,14 @@ function draw() {
 					if(average < facultyTarget - margin){
 						responseText = "Good try, but there are actually more women faculty than that, but it's still a low number.";
 					}else if(average >facultyTarget +margin){
-						responseText = "Good try, but unfortunately there are less women faculty than that";
+						responseText = "Good try, but unfortunately there are far less women faculty than that.";
+
 					}else{
 						responseText = "You guessed about the right percentage of women faculty.";
 					}
+					responseText += " Many female students feel that even fewer mentorship opportunities exist that meet the needs of women."
 					addText(responseText ,900,350,{color:colors.orange, width:"25%"});
-					addText("*There is limited data on a short range for this series",900,500,{color:colors.green,width:"25%", "font-size": "100%"});
+					addText("*There is limited data on a short range for this series",700,400,{color:colors.green,width:"10%", "font-size": "100%"});
 					nextReveal();
 				}else{
 					savePath = []
@@ -574,7 +580,6 @@ function draw() {
 				var linkText = $("<p>").text("Write Suzy Nelson a letter and tell her your thoughts on the topic.");
 				linkText.css({color:"cyan", "margin-top": "100px", "margin-left": "500px"});
 				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append(linkText));
-
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
 				var position = [200,450];
