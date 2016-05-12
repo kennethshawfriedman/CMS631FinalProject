@@ -12,6 +12,8 @@ var TYPE = {
 
 document.onselectstart = function(){ return false; };
 
+s1p = 400; //slider 1 position
+s2p = 400; //slider 2 position
 
 function addText(text, xloc, yloc,textColor, orientation){
 	var newElement = $("<p>", {class:"notation"});
@@ -79,7 +81,9 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
-var mode = TYPE.TWOAXIS;
+
+//var mode = TYPE.TWOAXIS;
+var mode = TYPE.SLIDER;
 
 
 var isSet = false;
@@ -159,7 +163,6 @@ function init() {
 	canvas.onmousedown = myDown;
 	canvas.onmouseup = myUp;
 	canvas.ondblclick = myDblClick;
-
 
 	$("#canvas").mousemove(function(e) {
 		myMove(e);
@@ -386,11 +389,58 @@ function draw() {
 
 
 				break;
-			case TYPE.SLIDER:
-
-				break
+			case TYPE.SLIDER: //KSF
+				addText("Question "+(mode + 1).toString() +" of 3",0,0);
+				addText("When comparing themselves to peers, what percent of men and women do you think do not feel capable at MIT?", 100, 50);
+				drawChalkLine(ctx,100,300,800,300); // x axis 1
+				drawChalkLine(ctx,100,500,800,500); // x axis 2
+				addText("0%", 100, 260);
+				addText("100%", 750, 260);
+				addText("0%", 100, 460);
+				addText("100%", 750, 460);
+				length = 100
+				//drawFirstBox
+				if (s1p == -1) {
+					drawBox(ctx, 400, 250, length);
+				} else {
+					drawBox(ctx, s1p, 250, length)
+				}
+				
+				if (s2p == -1) {
+					drawBox(ctx, 400, 450, length);
+				} else {
+					drawBox(ctx, s2p, 450, length)
+				}
+				
+				$(document).mousedown(function(evt){
+					mouseD = true;
+				});
+				
+				$(document).mouseup(function(evt){
+					mouseD = false;
+				});
+				
+				$(document).mousemove(function(evt){
+					if (mouseD) {
+						
+						mouseX = evt.pageX;
+						mouseY = evt.pageY;
+						
+						if (mouseY <= 350 && mouseY >= 250 && mouseX <= 700 && mouseX >= 100) {
+							invalidate();
+							drawBox(ctx, mouseX, 250, length);
+							drawBox(ctx, s2p, 450, length);
+							s1p = mouseX;
+						} else if (mouseY <= 550 && mouseY >= 450 && mouseX <= 700 && mouseX >= 100) {
+							invalidate();
+							drawBox(ctx, s1p, 250, length);
+							drawBox(ctx, mouseX, 450, length);
+							s2p = mouseX;
+						}
+					}
+				});
+				break;
 		}
-
 
 		canvasValid = true;
 	}
@@ -478,6 +528,13 @@ function drawChalk(x,y){
 		yLast = y;
 	}
 
+function drawBox(context, x, y, length) {
+	drawChalkLine(context, x, y, x, y+length);
+	drawChalkLine(context, x, y+length, x+length, y+length);
+	drawChalkLine(context, x+length, y+length, x+length, y);
+	drawChalkLine(context, x+length, y, x, y);
+}
+
 function drawChalkArc(context, x, y, r, sAngle, eAngle, fill, color) {
 	if (!color) {
 		color = "white";
@@ -525,6 +582,7 @@ function myMove(e) {
 				// invalidate();
 			break;
 		case TYPE.SLIDER:
+				getMouse(e);
 			break
 	}
 
