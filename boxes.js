@@ -243,7 +243,6 @@ function drawHandle() {
 		percentValue = parseInt(Math.round((angleValue * 100 / (2 * Math.PI) + 100)));
 		$("#percent").text(percentValue + "%");
 		pipercent = percentValue;
-
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
 	} else {
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
@@ -309,7 +308,7 @@ function draw() {
 				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50, {color: colors.orange});
 				
 				addText("Your Guess:", 800, 200);
-				// addText(pipercent, 800, 250, {'color':'#FFFF00'})
+
 				if (isSet) {
 					addText("Actual:", 100, 200);
 					addText(targetValue, 125, 230, {color:"red"});
