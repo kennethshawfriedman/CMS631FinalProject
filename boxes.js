@@ -479,17 +479,17 @@ function draw() {
 				drawChalkLine(ctx,100,300,800,300); // x axis 1
 				drawChalkLine(ctx,100,500,800,500); // x axis 2
 				addText("0%", 70, 260);
-				addText("100%", 810, 260);
+				addText("25%", 810, 260);
 				addText("0%", 70, 460);
-				addText("100%", 810, 460);
+				addText("25%", 810, 460);
 				length = 100;
 				drawBox(ctx, s1p, 250, length);
 				addText("Men", s1p+20, 255);
 				drawBox(ctx, s2p, 450, length);
 				addText("Women", s2p, 455);
 				
-				addText(parseInt((s1p-100)*1.17/7.0).toString(), s1p+30, 305);
-				addText(parseInt((s2p-100)*1.17/7.0).toString(), s2p+30, 505);
+				addText(parseInt((s1p-100)*1.17/28.0).toString(), s1p+30, 305);
+				addText(parseInt((s2p-100)*1.17/28.0).toString(), s2p+30, 505);
 				
 				addText("Move both sliders, then hit submit to compare to the actual results.", 900, 100, {'font-size':'100%', 'max-width':'200px', 'color':'#00FFFF'});
 				addText("Submit", 955, 260, {"color":'#FFFF00'});
@@ -524,7 +524,6 @@ function draw() {
 						if (mouseY <= 350 && mouseY >= 250 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
 							s1p = mouseX;
-							console.log(mouseX);
 						} else if (mouseY <= 550 && mouseY >= 450 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
 							s2p = mouseX;
@@ -538,8 +537,27 @@ function draw() {
 }
 
 function showSliderResults(ctx) {
-	drawBox(ctx, 155, 250, 100, "#FF0000");
-	drawBox(ctx, 229, 450, 100, "#FF0000");
+	drawBox(ctx, 319, 250, 100, "#FF0000");
+	drawBox(ctx, 620, 450, 100, "#FF0000");
+	
+	percent1 = parseInt((s1p-100)*1.17/28.0);
+	percent2 = parseInt((s2p-100)*1.17/28.0);
+	diff = (percent2)/percent1;
+	
+	var response;
+	
+	if (diff>1) {
+		if (diff>2.1 && diff < 2.5) {
+			response ="Yeah, you get the problem."
+		} else {
+			response = "You understand more women feel this way, but your ratio is off."
+		}
+	} else {
+		response = "Actually, a much higher percentage of women feel this way than men."
+		//actually women feel much less capable
+	}
+	response += " Over 20% of women do not feel capable compared to their peers. This is 2x higher than in men.";
+	addText(response, 900, 360, {"font-size":"100%", "color":"red"})
 }
 
 function nextMode(){
