@@ -96,7 +96,7 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
 
-var mode = 4; // var mode = TYPE.SLIDER;
+var mode = 0; // var mode = TYPE.SLIDER;
 
 
 var isSet = false;
@@ -574,7 +574,7 @@ function draw() {
 					  width: "80%",
 					  "z-index": "4",
 					  transform: "translate(-50%, -50%)"});
-				var finalText = $("<p>Now you have a better understanding of the status of gender diversity at MIT. The new <span style=\"color:cyan\">VP of Student Life</span> wants to hear what you think.</p>");
+				var finalText = $("<p>Now you have a better understanding of the status of gender disparity at MIT. The new <span style=\"color:cyan\">VP of Student Life</span> wants to hear what you think.</p>");
 				finalText.css({"font-size": "200%"});
 				titleElement.append(finalText);
 				var linkText = $("<p>").text("Write Suzy Nelson and advocate to close the gap on gender disparity at MIT.");
