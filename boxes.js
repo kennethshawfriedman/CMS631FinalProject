@@ -15,15 +15,14 @@ document.onselectstart = function(){ return false; };
 s1p = 400; //slider 1 position
 s2p = 400; //slider 2 position
 
-function addText(text, xloc, yloc,textColor, orientation){
+function addText(text, xloc, yloc, style){
 	var newElement = $("<p>", {class:"notation"});
 	newElement.text(text);
 	newElement.css({"left":xloc.toString()+"px", "top": yloc.toString()+"px"});
-	newElement.css({color:textColor});
 	$("body").append(newElement);
 	questionTexts.push(newElement);
-	if(orientation=== "vertical"){
-		newElement.css({transform: "rotate(-90deg)"});
+	if(style){
+		newElement.css(style);
 	}
 };
 
@@ -82,8 +81,8 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
 
-//var mode = TYPE.TWOAXIS;
-var mode = TYPE.SLIDER;
+var mode = TYPE.TWOAXIS;
+// var mode = TYPE.SLIDER;
 
 
 var isSet = false;
@@ -275,7 +274,7 @@ function draw() {
 				addText("Your Guess:", 800, 200);
 				if (isSet) {
 					addText("Actual:", 100, 200);
-					addText(targetValue, 100, 300, "red");
+					addText(targetValue, 100, 300, {color:"red"});
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
 
 					var nextButton = $("<img>",{id:"next", class:"abs nextButton", src:"arrow.png", onclick:"nextMode()"});
@@ -320,7 +319,7 @@ function draw() {
 						drawChalk(mouseX,mouseY);
 					}
 				}else{
-					$('.chalk').css('top',height-10);
+					$('.chalk').css('top',HEIGHT-10);
 					}
 				});
 
@@ -360,13 +359,13 @@ function draw() {
 				drawGraphData(fYears,faculty,"#FF0000");// faculty
 
 				//Title
-				addText("Percent Women", (chartOrigin[0] + chartLength[0])/2 , (chartOrigin[1] - chartLength[1])/2,"#00FFFF");
+				addText("Percent Women", (chartOrigin[0] + chartLength[0])/2 , (chartOrigin[1] - chartLength[1])/2,{color:"#00FFFF"});
 				
 				// X label
 				addText("Year", (chartOrigin[0] + chartLength[0])/2, chartOrigin[1]+ 50,"#00FFFF");
 
 				// y label
-				addText("Percentage", (chartOrigin[0] - 150 ), chartOrigin[1] - (chartLength[1])/2,"#00FFFF", "vertical");
+				addText("Percentage", (chartOrigin[0] - 150 ), chartOrigin[1] - (chartLength[1])/2,"#00FFFF", {transform: "rotate(-90deg)"});
 
 				//axis values
 				for(var i = 0; i < uYears.length; i++){
@@ -386,6 +385,15 @@ function draw() {
 					drawChalkLine(ctx,sPoint,dataToY(50), sPoint + sLength-50 ,dataToY(50));
 					sPoint = sPoint +sLength;
 				}
+
+				//legend
+				var legendOrigin = [chartOrigin[0]+ chartLength[0],chartOrigin[1] - chartLength[1]];
+				var yMarker = legendOrigin[1];
+				var yStep = 30;
+				var legend
+				addText("Legend:",legendOrigin[0], legendOrigin[1]);
+				// drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ )
+				yMarker = yMarker +yStep;
 
 
 				break;
