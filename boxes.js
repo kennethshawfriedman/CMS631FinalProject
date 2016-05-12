@@ -5,9 +5,10 @@
 // Free to use and distribute at will
 // So long as you are nice to people, etc
 var TYPE = {
-	PIECHART: 0,
-	TWOAXIS: 1,
-	SLIDER:2
+	INTRO: 0,
+	PIECHART: 1,
+	TWOAXIS: 2,
+	SLIDER:3
 }
 
 document.onselectstart = function(){ return false; };
@@ -302,9 +303,9 @@ function draw() {
 				drawChalkLine(ctx,chartOrigin[0],chartOrigin[1],chartOrigin[0],chartOrigin[1]-chartLength[1]); // y axis
 				drawChalkLine(ctx,100,100,120,130); //arrow head
 				drawChalkLine(ctx,100,100,80,130);
-				drawChalkLine(ctx,chartOrigin[0],chartOrigin[1],chartOrigin[0]+chartLength[0],chartOrigin[1]); // x axis
-				drawChalkLine(ctx,800,600,770,chartOrigin[1]+arrowDim[1]);// arrow head
-				drawChalkLine(ctx,800,600,770,580);
+				drawChalkLine(ctx,chartOrigin[0],chartOrigin[1],chartOrigin[0]+chartLength[0] + 50,chartOrigin[1]); // x axis
+				drawChalkLine(ctx,850,600,820,chartOrigin[1]+arrowDim[1]);// arrow head
+				drawChalkLine(ctx,850,600,820,580);
 				// addText("mouseposition:"+mx+","+ my, 600,600,"#00FFFF");
 
 				$('body').prepend('<div class="chalk"></div>');
@@ -355,17 +356,17 @@ function draw() {
 				}
 
 
-				drawGraphData(uYears,undergrad,"#00FFFF"); //undergrad
-				drawGraphData(fYears,faculty,"#FF0000");// faculty
+				drawGraphData(uYears,undergrad,"#FFFF00"); //undergrad
+				drawGraphData(fYears,faculty,"#228B22");// faculty
 
 				//Title
 				addText("Percent Women", (chartOrigin[0] + chartLength[0])/2 , (chartOrigin[1] - chartLength[1])/2,{color:"#00FFFF"});
 				
 				// X label
-				addText("Year", (chartOrigin[0] + chartLength[0])/2, chartOrigin[1]+ 50,"#00FFFF");
+				addText("Year", (chartOrigin[0] + chartLength[0])/2, chartOrigin[1]+ 50,{color:"#00FFFF"});
 
 				// y label
-				addText("Percentage", (chartOrigin[0] - 150 ), chartOrigin[1] - (chartLength[1])/2,"#00FFFF", {transform: "rotate(-90deg)"});
+				addText("Percentage", (chartOrigin[0] - 150 ), chartOrigin[1] - (chartLength[1])/2, {transform: "rotate(-90deg)", color:"#00FFFF"});
 
 				//axis values
 				for(var i = 0; i < uYears.length; i++){
@@ -382,18 +383,30 @@ function draw() {
 				var sPoint = chartOrigin[0];
 				var sLength = chartLength[0]/lines;
 				for (var i = 0; i <lines; i++){
-					drawChalkLine(ctx,sPoint,dataToY(50), sPoint + sLength-50 ,dataToY(50));
+					drawChalkLine(ctx,sPoint,dataToY(50), sPoint + sLength-50 ,dataToY(50),"#00FFFF");
 					sPoint = sPoint +sLength;
 				}
 
 				//legend
 				var legendOrigin = [chartOrigin[0]+ chartLength[0],chartOrigin[1] - chartLength[1]];
-				var yMarker = legendOrigin[1];
+				var yMarker = legendOrigin[1] + 50;
 				var yStep = 30;
-				var legend
+				var lineLength = 100;
+				var textOffset = {x: 110};
 				addText("Legend:",legendOrigin[0], legendOrigin[1]);
-				// drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ )
+
+				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,"#FFFF00");
+				addText("Undergrad", legendOrigin[0]+ textOffset.x, yMarker-10,{color:"#FFFF00", "font-size":"100%"});
 				yMarker = yMarker +yStep;
+
+				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,"#228B22");
+				addText("Actual Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:"#228B22", "font-size":"100%"});
+
+				yMarker = yMarker +yStep;
+				drawChalkLine(ctx,legendOrigin[0], yMarker, legendOrigin[0]+ lineLength, yMarker,"#FFFFFF");
+				addText("Your Guess Faculty", legendOrigin[0]+ textOffset.x, yMarker-10,{color:"#FFFFFF", "font-size":"100%"});
+
+
 
 
 				break;
