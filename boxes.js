@@ -25,6 +25,7 @@ document.onselectstart = function(){ return false; };
 
 s1p = 400; //slider 1 position
 s2p = 400; //slider 2 position
+pipercent = 50;
 var sliderSubmitCheck = false;
 var graphSubmit = false;
 var savePath = [];
@@ -241,6 +242,7 @@ function drawHandle() {
 		// percentValue = angleValue;
 		percentValue = parseInt(Math.round((angleValue * 100 / (2 * Math.PI) + 100)));
 		$("#percent").text(percentValue + "%");
+		pipercent = percentValue;
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
 	} else {
 		drawChalkArc(ctx, pc.x, pc.y, 100, 0, angleValue, true);
@@ -288,7 +290,7 @@ function draw() {
 					  "z-index": "4",
 					  transform: "translate(-50%, -50%)"});
 				titleElement.append($("<p>").text("TODAY'S LECTURE"));
-				titleElement.append($("<p>").text("Diversity at MIT"));
+				titleElement.append($("<p>").text("Gender Disparity at MIT"));
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
 
@@ -301,11 +303,12 @@ function draw() {
 				addText("What fraction of presidents of the technology clubs do you think are women?", 100, 50);
 				addText("Click to Set", 100, 100);
 				addText("Your Guess:", 800, 200);
+				addText(pipercent, 800, 250, {'color':'#FFFF00'})
 				if (isSet) {
 					addText("Actual:", 100, 200);
 					addText(targetValue, 100, 300, {color:"red"});
 					drawChalkArc(ctx, pc.x, pc.y, 100, 0,0.22*2*Math.PI, true, "red");
-
+					addText("Your guess was off by "+(pipercent-22).toString()+"%", 800, 350);
 					nextReveal();
 				} else {
 					$("#feedback").text("");
@@ -465,10 +468,11 @@ function draw() {
 					if(average < facultyTarget - margin){
 						responseText = "There are actually more women faculty than that, but it's still a low number.";
 					}else if(average >facultyTarget +margin){
-						responseText = "There are less women faculty than that";
+						responseText = "There are far less women faculty than that";
 					}else{
 						responseText = "You guessed about the right percentage of women faculty.";
 					}
+					responseText += " Many female students feel that even fewer mentorship opportunities exist that meet the needs of women."
 					addText(responseText ,900,350,{color:colors.orange, width:"25%"});
 					nextReveal();
 				}else{
@@ -548,12 +552,13 @@ function draw() {
 				var titleElement = $("<div>");
 				titleElement.css({
 					  position: "fixed",
+					  "font-size": "100%",
 					  top: "50%",
 					  left: "50%",
 					  "z-index": "4",
 					  transform: "translate(-50%, -50%)"});
-				titleElement.append($("<p>").text("FINAL RESULTS HERE"));
-				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append($("<p>").text("LINK to write letter here")));
+				titleElement.append($("<p>").text("It's clear: the MIT for men and women differ greatly. You can help convince the administration this is a problem. There is a brand new VPSL. Inform her of the problem. "));
+				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append($("<p>").text("Click here to write her a note.")));
 
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
