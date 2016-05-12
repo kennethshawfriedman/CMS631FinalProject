@@ -96,8 +96,7 @@ var fYears = [1985,1990,1995,2000,2005,2010];
 var undergrad = [2,2.5,7,15,17,25.5,32.5,35.5,41.0,42.0,45.5];
 var faculty = [7,10,13,15.5,18,21];
 
-var mode = 0;
- // var mode = TYPE.SLIDER;
+var mode = 4; // var mode = TYPE.SLIDER;
 
 
 var isSet = false;
@@ -421,7 +420,7 @@ function draw() {
 				drawGraphData(uYears,undergrad,"#FFFF00"); //undergrad
 
 				//Title
-				addText("Given this plot of the percent of the undergraduate population that are women, draw the line that you think represents the percent of the faculty population that are women.", chartOrigin[0] + 70 , (chartOrigin[1] - chartLength[1])/2,{color:colors.orange, width:"50%"});
+				addText("Given this plot of the percent of the undergraduate population that are women, draw the line that you think represents the percent of the faculty population that are women.", chartOrigin[0] + 70 , (chartOrigin[1] - chartLength[1])/2,{color:colors.orange, width:"40%"});
 				
 				// X label
 				addText("Year", (chartOrigin[0] + chartLength[0])/2, chartOrigin[1]+ 50,{color:"#00FFFF"});
@@ -488,7 +487,7 @@ function draw() {
 						responseText = "You guessed about the right percentage of women faculty.";
 					}
 					responseText += " Many female students feel that even fewer mentorship opportunities exist that meet the needs of women."
-					addText(responseText ,900,350,{color:colors.orange, width:"25%"});
+					addText(responseText ,900,350,{color:colors.orange, width:"25%", "font-size": "110%"});
 					addText("*There is limited data on a short range for this series",700,400,{color:colors.green,width:"10%", "font-size": "100%"});
 					nextReveal();
 				}else{
@@ -508,7 +507,7 @@ function draw() {
 				break;
 			case TYPE.SLIDER: //KSF
 				addText("Question 3 of 3",0,0);
-				addText("When comparing themselves to peers, what percent of men and women do you think do not feel capable at MIT?", 100, 50);
+				addText("When comparing themselves to peers, what percent of men and women do you think do not feel capable at MIT?", 100, 50,{color:colors.orange,width:"40%"});
 				drawChalkLine(ctx,100,300,800,300); // x axis 1
 				drawChalkLine(ctx,100,500,800,500); // x axis 2
 				addText("0%", 70, 260);
@@ -565,6 +564,8 @@ function draw() {
 				});
 				break;
 			case TYPE.FINAL:
+				addText("Gender Disparity @ MIT: Help draw the future",0,0,{color:colors.orange,"font-size":"400%", left:"50%", width:"75%","text-align":"center", transform:"translate(-50%,0)"});
+				// drawChalkLine()
 				var titleElement = $("<div>");
 				titleElement.css({
 					  position: "fixed",
@@ -576,8 +577,8 @@ function draw() {
 				var finalText = $("<p>Now you have a better understanding of the status of gender diversity at MIT. The new <span style=\"color:cyan\">VP of Student Life</span> wants to hear what you think.</p>");
 				finalText.css({"font-size": "200%"});
 				titleElement.append(finalText);
-				var linkText = $("<p>").text("Write Suzy Nelson a letter and tell her your thoughts on the topic.");
-				linkText.css({color:"cyan", "margin-top": "100px", "margin-left": "500px"});
+				var linkText = $("<p>").text("Write Suzy Nelson and advocate to close the gap on gender disparity at MIT.");
+				linkText.css({color:"cyan", "margin-top": "100px", "margin-left": "450px"});
 				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append(linkText));
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
