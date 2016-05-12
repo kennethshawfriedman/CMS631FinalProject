@@ -402,24 +402,19 @@ function draw() {
 				addText("When comparing themselves to peers, what percent of men and women do you think do not feel capable at MIT?", 100, 50);
 				drawChalkLine(ctx,100,300,800,300); // x axis 1
 				drawChalkLine(ctx,100,500,800,500); // x axis 2
-				addText("0%", 100, 260);
-				addText("100%", 750, 260);
-				addText("0%", 100, 460);
-				addText("100%", 750, 460);
-				length = 100
-				//drawFirstBox
-				if (s1p == -1) {
-					drawBox(ctx, 400, 250, length);
-				} else {
-					drawBox(ctx, s1p, 250, length)
-				}
+				addText("0%", 70, 260);
+				addText("100%", 810, 260);
+				addText("0%", 70, 460);
+				addText("100%", 810, 460);
+				length = 100;	
+				drawBox(ctx, s1p, 250, length);
+				addText("Men", s1p+20, 255);
+				drawBox(ctx, s2p, 450, length);
+				addText("Women", s2p, 455);
 				
-				if (s2p == -1) {
-					drawBox(ctx, 400, 450, length);
-				} else {
-					drawBox(ctx, s2p, 450, length)
-				}
-				
+				addText(parseInt((s1p-100)*1.17/7.0).toString(), s1p+30, 305);
+				addText(parseInt((s2p-100)*1.17/7.0).toString(), s2p+30, 505);
+
 				$(document).mousedown(function(evt){
 					mouseD = true;
 				});
@@ -430,26 +425,19 @@ function draw() {
 				
 				$(document).mousemove(function(evt){
 					if (mouseD) {
-						
 						mouseX = evt.pageX;
 						mouseY = evt.pageY;
-						
 						if (mouseY <= 350 && mouseY >= 250 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
-							drawBox(ctx, mouseX, 250, length);
-							drawBox(ctx, s2p, 450, length);
 							s1p = mouseX;
 						} else if (mouseY <= 550 && mouseY >= 450 && mouseX <= 700 && mouseX >= 100) {
 							invalidate();
-							drawBox(ctx, s1p, 250, length);
-							drawBox(ctx, mouseX, 450, length);
 							s2p = mouseX;
 						}
 					}
 				});
 				break;
 		}
-
 		canvasValid = true;
 	}
 }
