@@ -317,7 +317,7 @@ function draw() {
 				
 				break;
 			case TYPE.TWOAXIS:
-				addText("Question "+(mode + 1).toString() +" of 3",0,0);
+				addText("Question 2 of 3",0,0);
 				var chartLength = [700,500];
 				var chartOrigin = [100,600];
 				var arrowDim = [70,20];
@@ -490,7 +490,7 @@ function draw() {
 
 				break;
 			case TYPE.SLIDER: //KSF
-				addText("Question "+(mode + 1).toString() +" of 3",0,0);
+				addText("Question 3 of 3",0,0);
 				addText("When comparing themselves to peers, what percent of men and women do you think do not feel capable at MIT?", 100, 50);
 				drawChalkLine(ctx,100,300,800,300); // x axis 1
 				drawChalkLine(ctx,100,500,800,500); // x axis 2
@@ -551,15 +551,25 @@ function draw() {
 				var titleElement = $("<div>");
 				titleElement.css({
 					  position: "fixed",
-					  top: "50%",
+					  top: "55%",
 					  left: "50%",
+					  width: "80%",
 					  "z-index": "4",
 					  transform: "translate(-50%, -50%)"});
-				titleElement.append($("<p>").text("FINAL RESULTS HERE"));
-				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append($("<p>").text("LINK to write letter here")));
+				var finalText = $("<p>Now you have a better understanding of the status of gender diversity at MIT. The new <span style=\"color:cyan\">VP of Student Life</span> wants to hear what you think.</p>");
+				finalText.css({"font-size": "200%"});
+				titleElement.append(finalText);
+				var linkText = $("<p>").text("Write Suzy Nelson a letter and tell her your thoughts on the topic.");
+				linkText.css({color:"cyan", "margin-top": "100px", "margin-left": "500px"});
+				titleElement.append($("<a>",{href:"https://welcomesuzy.wordpress.com/write/"}).append(linkText));
 
 				$("body").append(titleElement);
 				questionTexts.push(titleElement);
+				var position = [200,450];
+				var size = [300,100]
+				var tailPercent = 0.75;
+				var thickness = 50;
+				drawArrow(ctx,position[0], position[1], size[0], size[1], thickness, tailPercent, colors.orange);
 				break;
 		}
 		canvasValid = true;
